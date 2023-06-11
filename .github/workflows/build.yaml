@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    paths-ignore:
+      - '.git**'
+      - '**.md'
+      - 'LICENSE'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Cargo
+        uses: actions/cache@v3
+        with:
+          path: '~/.cargo'
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build project
+        run: |
+          cargo build --all
+          echo "version=$(./target/debug/onyxwall -v | grep 'onyxwall (Version ' | sed -e 's/onyxwall (Version //' -e 's/)//')" >> $GITHUB_ENV
+          echo "commit=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
+
+      - name: Archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'onyxwall_v${{ env.version }}@${{ env.commit }}'
+          path: |
+            target/debug/onyxwall
+            target/debug/libonyxwall_core.rlib
