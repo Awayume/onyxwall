@@ -1,0 +1,16 @@
+[package]
+name = "onyxwall-core"
+version = "0.1.0-alpha0"
+authors = ["Awayume <dev@awayume.jp>"]
+edition = "2021"
+rust-version = "1.70"
+description = "A library for Crypto assets"
+readme = "README.md"
+repository = "https://github.com/Awayume/onyxwall"
+license = "AGPL-3.0-only"
+keywords = ["api", "crypto", "crypto-currencies", "crypto-assets", "bitcoin"]
+categories = ["api-bindings", "cryptography::cryptocurrencies", "network-programming"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
